@@ -48,9 +48,26 @@ class SampleListener(Leap.Listener):
 
             intPos = []
    
+            #x
+
             intPos.append(int(hand.palm_position[0]))
+            if intPos[0] > 400:
+                intPos[0] = 400
+            elif intPos[0] < -400:
+                intPos[0] = -400
+            #y
             intPos.append(int(hand.palm_position[1]))
+            if intPos[1] > 800:
+                intPos[1] = 800
+            elif intPos[1] < 100:
+                intPos[1] = 100
+
+            #z
             intPos.append(int(hand.palm_position[2]))
+            if intPos[2] > 400:
+                intPos[2] = 400
+            elif intPos[2] < -400:
+                intPos[2] = -400
 
             print("Coordinates of Palm: ")
             print(intPos)
