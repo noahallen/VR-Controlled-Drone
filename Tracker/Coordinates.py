@@ -6,7 +6,7 @@
 # between Leap Motion and you, your company or other organization.             #
 ################################################################################
 
-import Leap, sys, thread, time
+import Leap, sys, thread, time, socket
 
 
 class SampleListener(Leap.Listener):
@@ -27,10 +27,11 @@ class SampleListener(Leap.Listener):
         print ("Exited")
 
     def on_frame(self, controller):
-        
-        #Slows down the speed of the output by skipping frames
-        seconds = .1
+
+        #Slows down the speed of the output by skipping frames by changing seconds variable
+        seconds = .5
         time.sleep(seconds)
+        
 
         # Get the most recent frame and report some basic information
         frame = controller.frame()
@@ -50,8 +51,15 @@ class SampleListener(Leap.Listener):
             intPos.append(int(hand.palm_position[0]))
             intPos.append(int(hand.palm_position[1]))
             intPos.append(int(hand.palm_position[2]))
+
             print("Coordinates of Palm: ")
             print(intPos)
+
+            #Send information to the connected client, if one isnt there wait for connection of another client
+            try:
+                clientsocket.send(str(intPos))
+            except:
+                waitForConnection()
 
 
 
@@ -98,10 +106,19 @@ class SampleListener(Leap.Listener):
         if not frame.hands.is_empty:
             print ("")
 
-
+        #If no hands are detected send a zero vector to the client
         if frame.hands.is_empty:
             print("No Hands Detected")
+            zeroVector = [0, 0, 0]
 
+            #Send information to the connected client, if one isnt there wait for connection of another client
+            try:
+                clientsocket.send(str(zeroVector))
+            except:
+                waitForConnection()
+
+
+#Initializes hand tracker class
 def main():
     # Create a sample listener and controller
     listener = SampleListener()
@@ -110,7 +127,7 @@ def main():
     # Have the sample listener receive events from the controller
     controller.add_listener(listener)
 
-    # Keep this process running until Enter is pressed
+    # Keep this process running until "Enter" is pressed
     print ("Press Enter to quit...")
     try:
         sys.stdin.readline()
@@ -121,5 +138,20 @@ def main():
         controller.remove_listener(listener)
 
 
+#Function to pause program until a websocket connection is made
+def waitForConnection():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((socket.gethostname(), 1243))
+    s.listen(5)
+    print("Listening for a connection")
+    global clientsocket
+    global address
+    clientsocket, address = s.accept()
+    print("Connection found")
+
+
+#Forgive me for the globals, websocket variable needed access everywhere
 if __name__ == "__main__":
+    global s
+    waitForConnection()
     main()
