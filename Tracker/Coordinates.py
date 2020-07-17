@@ -29,22 +29,36 @@ class SampleListener(Leap.Listener):
     def on_frame(self, controller):
         
         #Slows down the speed of the output by skipping frames
-        #seconds = .3
-        #time.sleep(seconds)
+        seconds = .1
+        time.sleep(seconds)
 
         # Get the most recent frame and report some basic information
         frame = controller.frame()
 
-        print ("Frame id: %d, timestamp: %d, hands: %d, fingers: %d" % (
-              frame.id, frame.timestamp, len(frame.hands), len(frame.fingers)))
+        #Prints information about the frame and hands/fingers detected
+        # print ("Frame id: %d, timestamp: %d, hands: %d, fingers: %d" % (
+        #       frame.id, frame.timestamp, len(frame.hands), len(frame.fingers)))
 
         # Get hands
         for hand in frame.hands:
 
-            handType = "Left hand" if hand.is_left else "Right hand"
+            #Checks if hand is left or right
+            #handType = "Left hand" if hand.is_left else "Right hand"
 
-            print ("  %s, id %d, position: %s" % (
-                handType, hand.id, hand.palm_position))
+            intPos = []
+   
+            intPos.append(int(hand.palm_position[0]))
+            intPos.append(int(hand.palm_position[1]))
+            intPos.append(int(hand.palm_position[2]))
+            print("Coordinates of Palm: ")
+            print(intPos)
+
+
+
+
+            #Prints basic info of the shown hands
+            # print ("  %s, id %d, position: %s" % (
+            #     handType, hand.id, hand.palm_position))
 
             # # Get the hand's normal vector and direction
             # normal = hand.palm_normal
@@ -83,6 +97,10 @@ class SampleListener(Leap.Listener):
 
         if not frame.hands.is_empty:
             print ("")
+
+
+        if frame.hands.is_empty:
+            print("No Hands Detected")
 
 def main():
     # Create a sample listener and controller
