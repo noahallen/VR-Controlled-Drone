@@ -1,5 +1,12 @@
 import socket
+import tello
 from ast import literal_eval
+
+def droneController(coords):
+    #Testing function calls
+
+    trackerToSpeed = 10
+    go_xyz_speed(20, 20, 20, trackerToSpeed)
 
 
 def testFunc(coords):
