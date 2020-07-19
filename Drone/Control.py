@@ -5,7 +5,9 @@ from ast import literal_eval
 def droneController(coords):
     #Testing function calls
 
-    trackerToSpeed = 10
+    trackerXToSpeed = 10
+    trackerYToSpeed = 10
+    trackerZToSpeed = 10
     go_xyz_speed(20, 20, 20, trackerToSpeed)
 
 
