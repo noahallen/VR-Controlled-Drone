@@ -18,6 +18,10 @@ def droneController(coords):
     trackerZToDrone = int((z / min) * 20)
     trackerToSpeed = int((distanceFromCenter / 6.2) + 9)
 
+    #The speed is calculated this way because the max distance from the center
+    #is approximately 566 units away, and to divide it evenly to fit in
+    #the tello's range of 10 - 100, every 6.2 units is converted to 1 unit of speed
+
     tello.go_xyz_speed(trackerXToDrone, trackerYToDrone, trackerZToDrone, trackerToSpeed)
 
 
