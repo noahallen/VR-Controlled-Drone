@@ -1,28 +1,32 @@
 import socket
 import tello
-import math
+import pygame, math, time
 from ast import literal_eval
 
 def droneController(coords):
     #Testing function calls
 
-    x = intPos[0]
-    z = intPos[2]
+    x = coords[0]
+    y = coords[1] - 450
+    z = coords[2]
     min = z
 
-    if x < z:
+    if x < min:
         min = x
-    distanceFromCenter = math.sqrt(math.pow(x, 2) + math.pow(z, 2))
-    trackerXToDrone = (x / min) * 20
-    trackerYToDrone = intPos[1]
-    trackerZToDrone = (z / min) * 20
-    trackerToSpeed = (distanceFromCenter / 6.2) + 9
+    if y < min:
+        min = y
 
-    go_xyz_speed(trackerXToDrone, trackerYToDrone, trackerZToDrone, trackerToSpeed)
+    distanceFromCenter = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2) + math.pow(y, 2)))
+    trackerXToDrone = int((x / min) * 20)
+    trackerYToDrone = int((y / min) * 20)
+    trackerZToDrone = int((z / min) * 20)
+    trackerToSpeed = int((distanceFromCenter / 7.6) + 9)
 
+    #The speed is calculated this way because the max distance from the center
+    #is approximately 566 units away, and to divide it evenly to fit in
+    #the tello's range of 10 - 100, every 7.6 units is converted to 1 unit of speed
 
-import pygame, math, time
-
+    tello.go_xyz_speed(trackerXToDrone, trackerYToDrone, trackerZToDrone, trackerToSpeed)
 
 class GUI_Support:
 
@@ -37,7 +41,7 @@ class GUI_Support:
             else:
                 return False
 
-    
+
     def drawGraphics(self, position, screen, dims):
         handX, handY, handZ = position
         #Centers the X and Z coordinates
@@ -75,7 +79,7 @@ class GUI_Support:
 def guiDisplay(coords):
     guiSupport.drawGraphics(coords, screen, (800, 800))
     pygame.display.update()
-    print(coords)   
+    print(coords)
 
 
 def main():
@@ -104,7 +108,7 @@ if __name__ == "__main__":
     xWidth = 1300
     yHeight = 800
     screen = guiSupport.initDisplay((xWidth, yHeight))
-    
+
     global s
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((socket.gethostname(), 1243))
