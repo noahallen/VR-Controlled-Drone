@@ -1,32 +1,32 @@
 import socket
 import tello
-import math
+import pygame, math, time
 from ast import literal_eval
 
 def droneController(coords):
     #Testing function calls
 
-    x = intPos[0]
-    z = intPos[2]
+    x = coords[0]
+    y = coords[1] - 450
+    z = coords[2]
     min = z
 
-    if x < z:
+    if x < min:
         min = x
-    distanceFromCenter = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2)))
+    if y < min:
+        min = y
+
+    distanceFromCenter = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2) + math.pow(y, 2)))
     trackerXToDrone = int((x / min) * 20)
-    trackerYToDrone = int(intPos[1])
+    trackerYToDrone = int((y / min) * 20)
     trackerZToDrone = int((z / min) * 20)
-    trackerToSpeed = int((distanceFromCenter / 6.2) + 9)
+    trackerToSpeed = int((distanceFromCenter / 7.6) + 9)
 
     #The speed is calculated this way because the max distance from the center
     #is approximately 566 units away, and to divide it evenly to fit in
-    #the tello's range of 10 - 100, every 6.2 units is converted to 1 unit of speed
+    #the tello's range of 10 - 100, every 7.6 units is converted to 1 unit of speed
 
     tello.go_xyz_speed(trackerXToDrone, trackerYToDrone, trackerZToDrone, trackerToSpeed)
-
-
-import pygame, math, time
-
 
 class GUI_Support:
 
