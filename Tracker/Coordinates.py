@@ -29,7 +29,7 @@ class SampleListener(Leap.Listener):
     def on_frame(self, controller):
 
         #Slows down the speed of the output by skipping frames by changing seconds variable
-        seconds = .5
+        seconds = .01
         time.sleep(seconds)
         
 
@@ -57,10 +57,10 @@ class SampleListener(Leap.Listener):
                 intPos[0] = -400
             #y
             intPos.append(int(hand.palm_position[1]))
-            if intPos[1] > 800:
-                intPos[1] = 800
-            elif intPos[1] < 100:
-                intPos[1] = 100
+            if intPos[1] > 850:
+                intPos[1] = 850
+            elif intPos[1] < 50:
+                intPos[1] = 50
 
             #z
             intPos.append(int(hand.palm_position[2]))
@@ -126,7 +126,7 @@ class SampleListener(Leap.Listener):
         #If no hands are detected send a zero vector to the client
         if frame.hands.is_empty:
             print("No Hands Detected")
-            zeroVector = [0, 0, 0]
+            zeroVector = [0, 450, 0]
 
             #Send information to the connected client, if one isnt there wait for connection of another client
             try:
