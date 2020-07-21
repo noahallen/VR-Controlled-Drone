@@ -1,14 +1,24 @@
 import socket
 import tello
+import math
 from ast import literal_eval
 
 def droneController(coords):
     #Testing function calls
 
-    trackerXToSpeed = 10
-    trackerYToSpeed = 10
-    trackerZToSpeed = 10
-    go_xyz_speed(20, 20, 20, trackerToSpeed)
+    x = intPos[0]
+    z = intPos[2]
+    min = z
+
+    if x < z:
+        min = x
+    distanceFromCenter = math.sqrt(math.pow(x, 2) + math.pow(z, 2))
+    trackerXToDrone = (x / min) * 20
+    trackerYToDrone = intPos[1]
+    trackerZToDrone = (z / min) * 20
+    trackerToSpeed = (distanceFromCenter / 6.2) + 9
+
+    go_xyz_speed(trackerXToDrone, trackerYToDrone, trackerZToDrone, trackerToSpeed)
 
 
 def testFunc(coords):
