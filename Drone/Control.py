@@ -12,13 +12,13 @@ def droneController(coords):
 
     if x < z:
         min = x
-    distanceFromCenter = math.sqrt(math.pow(x, 2) + math.pow(z, 2))
-    trackerXToDrone = (x / min) * 20
-    trackerYToDrone = intPos[1]
-    trackerZToDrone = (z / min) * 20
-    trackerToSpeed = (distanceFromCenter / 6.2) + 9
+    distanceFromCenter = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2)))
+    trackerXToDrone = int((x / min) * 20)
+    trackerYToDrone = int(intPos[1])
+    trackerZToDrone = int((z / min) * 20)
+    trackerToSpeed = int((distanceFromCenter / 6.2) + 9)
 
-    go_xyz_speed(trackerXToDrone, trackerYToDrone, trackerZToDrone, trackerToSpeed)
+    tello.go_xyz_speed(trackerXToDrone, trackerYToDrone, trackerZToDrone, trackerToSpeed)
 
 
 import pygame, math, time
@@ -37,7 +37,7 @@ class GUI_Support:
             else:
                 return False
 
-    
+
     def drawGraphics(self, position, screen, dims):
         handX, handY, handZ = position
         #Centers the X and Z coordinates
@@ -75,7 +75,7 @@ class GUI_Support:
 def guiDisplay(coords):
     guiSupport.drawGraphics(coords, screen, (800, 800))
     pygame.display.update()
-    print(coords)   
+    print(coords)
 
 
 def main():
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     xWidth = 1300
     yHeight = 800
     screen = guiSupport.initDisplay((xWidth, yHeight))
-    
+
     global s
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((socket.gethostname(), 1243))
