@@ -48,13 +48,15 @@ class SampleListener(Leap.Listener):
 
             intPos = []
    
-            #x
+            #Limits the xyz coordinate outputs to a certain range
 
+            #x
             intPos.append(int(hand.palm_position[0]))
             if intPos[0] > 400:
                 intPos[0] = 400
             elif intPos[0] < -400:
                 intPos[0] = -400
+
             #y
             intPos.append(int(hand.palm_position[1]))
             if intPos[1] > 850:
@@ -69,6 +71,7 @@ class SampleListener(Leap.Listener):
             elif intPos[2] < -400:
                 intPos[2] = -400
 
+
             print("Coordinates of Palm: ")
             print(intPos)
 
@@ -77,7 +80,6 @@ class SampleListener(Leap.Listener):
                 clientsocket.send(str(intPos))
             except:
                 waitForConnection()
-
 
 
 
@@ -95,30 +97,6 @@ class SampleListener(Leap.Listener):
             #     normal.roll * Leap.RAD_TO_DEG,
             #     direction.yaw * Leap.RAD_TO_DEG)
 
-            # # Get arm bone
-            # arm = hand.arm
-            # print "  Arm direction: %s, wrist position: %s, elbow position: %s" % (
-            #     arm.direction,
-            #     arm.wrist_position,
-            #     arm.elbow_position)
-
-            # # Get fingers
-            # for finger in hand.fingers:
-
-            #     print "    %s finger, id: %d, length: %fmm, width: %fmm" % (
-            #         self.finger_names[finger.type],
-            #         finger.id,
-            #         finger.length,
-            #         finger.width)
-
-            #     # Get bones
-            #     for b in range(0, 4):
-            #         bone = finger.bone(b)
-            #         print "      Bone: %s, start: %s, end: %s, direction: %s" % (
-            #             self.bone_names[bone.type],
-            #             bone.prev_joint,
-            #             bone.next_joint,
-            #             bone.direction)
 
         if not frame.hands.is_empty:
             print ("")
@@ -167,7 +145,7 @@ def waitForConnection():
     print("Connection found")
 
 
-#Forgive me for the globals, websocket variable needed access everywhere
+#Waits for a client to connect to the websocket then proceeds to send coordinates to the client when they connect
 if __name__ == "__main__":
     global s
     waitForConnection()
