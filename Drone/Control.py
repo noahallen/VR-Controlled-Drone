@@ -1,6 +1,6 @@
 import socket
 import tello
-import pygame, math, time, sys
+import pygame, math, time, sys, os
 from ast import literal_eval
 
 def droneController(coords):
@@ -52,7 +52,7 @@ class GUI_Support:
         handZ += 400
         handY += 850
         width, height = dims
-        screen.fill((255, 255, 255))
+        screen.fill((175, 238, 247))
 
         circleRadius = 20
         pygame.draw.circle(screen, (0, 0, 0), (handX, handZ), circleRadius)
@@ -67,6 +67,53 @@ class GUI_Support:
         #Y Axis Deadzone
         pygame.draw.line(screen, (0, 0, 0), (800, 300), (1300, 300))
         pygame.draw.line(screen, (0, 0, 0), (800, 500), (1300, 500))
+
+
+        # RIGHT ARROW
+        pygame.draw.line(screen, (0, 0, 0), (550, 410), (620,410), 2)
+        pygame.draw.line(screen, (0, 0, 0), (620,410), (620, 425), 2)
+        pygame.draw.line(screen, (0, 0, 0), (620, 425), (650, 400), 2)
+        pygame.draw.line(screen, (0, 0, 0), (650, 400), (620, 375), 2)
+        pygame.draw.line(screen, (0, 0, 0), (620, 375), (620,390), 2)
+        pygame.draw.line(screen, (0, 0, 0), (620,390), (550,390), 2)
+        pygame.draw.line(screen, (0, 0, 0), (550,390), (550, 410), 2)
+        wRight = arrowFont.render(f'Right', True, (0,0,0))
+        screen.blit(wRight, (562, 388))
+
+        # LEFT ARROW
+        pygame.draw.line(screen, (0, 0, 0), (250, 410), (180,410), 2)
+        pygame.draw.line(screen, (0, 0, 0), (180,410), (180, 425), 2)
+        pygame.draw.line(screen, (0, 0, 0), (180, 425), (150, 400), 2)
+        pygame.draw.line(screen, (0, 0, 0), (150, 400), (180, 375), 2)
+        pygame.draw.line(screen, (0, 0, 0), (180, 375), (180,390), 2)
+        pygame.draw.line(screen, (0, 0, 0), (180,390), (250,390), 2)
+        pygame.draw.line(screen, (0, 0, 0), (250,390), (250, 410), 2)
+        wLeft = arrowFont.render(f'Left', True, (0,0,0))
+        screen.blit(wLeft, (200, 388))
+
+        # FORWARD ARROW
+        pygame.draw.line(screen, (0, 0, 0), (410, 250), (410,180), 2)
+        pygame.draw.line(screen, (0, 0, 0), (410,180), (425, 180), 2)
+        pygame.draw.line(screen, (0, 0, 0), (425, 180), (400, 150), 2)
+        pygame.draw.line(screen, (0, 0, 0), (400, 150), (375, 180), 2)
+        pygame.draw.line(screen, (0, 0, 0), (375, 180), (390,180), 2)
+        pygame.draw.line(screen, (0, 0, 0), (390,180), (390,250), 2)
+        pygame.draw.line(screen, (0, 0, 0), (390,250), (410, 250), 2)
+        wF = arrowFont.render(f'F', True, (0,0,0))
+        screen.blit(wF, (395, 157))
+        wo = arrowFont.render(f'o', True, (0,0,0))
+        screen.blit(wo, (395, 169))
+        wr = arrowFont.render(f'r', True, (0,0,0))
+        screen.blit(wr, (395, 181))
+        ww = arrowFont.render(f'w', True, (0,0,0))
+        screen.blit(ww, (395, 193))
+        wa = arrowFont.render(f'a', True, (0,0,0))
+        screen.blit(wa, (395, 205))
+        wr = arrowFont.render(f'r', True, (0,0,0))
+        screen.blit(wr, (395, 217))
+        wd = arrowFont.render(f'd', True, (0,0,0))
+        screen.blit(wd, (395, 229))
+
 
         #XZ axis coordinate display
         showXZCoords = myFont.render(f'X,Z Coords:{handXVisual},{handZVisual}', True, (0,0,0))
@@ -122,6 +169,7 @@ if __name__ == "__main__":
     #initializing font for coordinate display
     pygame.font.init()
     myFont = pygame.font.SysFont('Comic Sans MS', 22)
+    arrowFont = pygame.font.SysFont('Comic Sans MS', 18)
     #drone icon
     icon = pygame.image.load(path + '\Drone.png')
     pygame.display.set_icon(icon)
