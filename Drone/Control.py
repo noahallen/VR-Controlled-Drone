@@ -42,11 +42,32 @@ class GUI_Support:
         return pygame.display.set_mode(dims)
 
     def isQuit(self):
+        takeOffFlag = False
+        landingFlag = False
+        websocketFlag = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return True
-            else:
-                return False
+                raise SystemExit
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    #call rotate-left function
+                elif event.key == pygame.K_d:
+                    #call rotate-right function
+            elif event.type == pygame.KEYUP:
+                 if event.key == pygame.K_w:
+                    if takeOffFlag == False:
+                        #call take-off function here
+                        takeOffFlag = True
+                elif event.Key == pygame.K_s:
+                    if landingFlag == False:
+                        #call land function here
+                        landingFlag = True
+                elif event.key == pygame.K_SPACEBAR:
+                    if websocketFlag == False:
+                        #call web-socket connection
+                        websocketFlag = True
+
+
 
     #Function to draw and update GUI graphics as it receives new coordinates
     def drawGraphics(self, position, screen, dims):
