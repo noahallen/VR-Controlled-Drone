@@ -1,6 +1,6 @@
 import socket
 import tello
-import pygame, math, time
+import pygame, math, time, sys
 from ast import literal_eval
 
 def droneController(coords):
@@ -44,11 +44,13 @@ class GUI_Support:
 
     def drawGraphics(self, position, screen, dims):
         handX, handY, handZ = position
+        handXVisual = handX
+        handZVisual = handZ
         #Centers the X and Z coordinates
         handY = handY * -1
         handX += 400
         handZ += 400
-        handY += 800
+        handY += 850
         width, height = dims
         screen.fill((255, 255, 255))
 
@@ -63,8 +65,17 @@ class GUI_Support:
         pygame.draw.line(screen, (0, 0, 0), (800, 0), (800, 800))
 
         #Y Axis Deadzone
-        pygame.draw.line(screen, (0, 0, 0), (800, 225), (1300, 225))
-        pygame.draw.line(screen, (0, 0, 0), (800, 675), (1300, 675))
+        pygame.draw.line(screen, (0, 0, 0), (800, 300), (1300, 300))
+        pygame.draw.line(screen, (0, 0, 0), (800, 500), (1300, 500))
+
+        #XZ axis coordinate display
+        showXZCoords = myFont.render(f'X,Z Coords:{handXVisual},{handZVisual}', True, (0,0,0))
+        screen.blit(showXZCoords, (0, 10))
+
+        #Y axis coordinate display
+        handYVisual = 400 - handY 
+        showYCoords = myFont.render(f'Y Coords:{handYVisual}', True, (0,0,0))
+        screen.blit(showYCoords, (810, 0))
 
 
 
@@ -108,6 +119,13 @@ if __name__ == "__main__":
     xWidth = 1300
     yHeight = 800
     screen = guiSupport.initDisplay((xWidth, yHeight))
+    #initializing font for coordinate display
+    pygame.font.init()
+    myFont = pygame.font.SysFont('Comic Sans MS', 22)
+    #drone icon
+    icon = pygame.image.load(path + '\Drone.png')
+    pygame.display.set_icon(icon)
+    pygame.display.set_caption('Drone Controller')
 
     global s
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
