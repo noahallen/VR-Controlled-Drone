@@ -167,6 +167,28 @@ class GUI_Support:
         screen.blit(wDescend, (825, 562))
         wDescend = arrowFont.render(f'd', True, (0,0,0))
         screen.blit(wDescend, (825, 574))
+
+        # ASCEND ARROW
+        pygame.draw.line(screen, (0, 0, 0), (840, 295), (840,225), 2)
+        pygame.draw.line(screen, (0, 0, 0), (840,225), (855, 225), 2)
+        pygame.draw.line(screen, (0, 0, 0), (855, 225), (830, 195), 2)
+        pygame.draw.line(screen, (0, 0, 0), (830, 195), (805, 225), 2)
+        pygame.draw.line(screen, (0, 0, 0), (805, 225), (820,225), 2)
+        pygame.draw.line(screen, (0, 0, 0), (820,225), (820,295), 2)
+        pygame.draw.line(screen, (0, 0, 0), (820,295), (840, 295), 2)
+        wAscend = arrowFont.render(f'A', True, (0,0,0))
+        screen.blit(wAscend, (825, 210))
+        wAscend = arrowFont.render(f's', True, (0,0,0))
+        screen.blit(wAscend, (825, 222))
+        wAscend = arrowFont.render(f'c', True, (0,0,0))
+        screen.blit(wAscend, (825, 234))
+        wAscend = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(wAscend, (825, 246))
+        wAscend = arrowFont.render(f'n', True, (0,0,0))
+        screen.blit(wAscend, (825, 258))
+        wAscend = arrowFont.render(f'd', True, (0,0,0))
+        screen.blit(wAscend, (825, 270))
+        
         
 
 
