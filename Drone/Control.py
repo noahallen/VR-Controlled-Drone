@@ -4,29 +4,27 @@ import pygame, math, time, sys, os
 from ast import literal_eval
 
 def droneController(coords):
-    #Testing function calls
-
     x = coords[0]
     y = coords[1] - 450
     z = coords[2]
-    min = z
 
-    if x < min:
-        min = x
-    if y < min:
-        min = y
+    xSpeed = 0
+    ySpeed = 0
+    zSpeed = 0
 
-    distanceFromCenter = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2) + math.pow(y, 2)))
-    trackerXToDrone = int((x / min) * 20)
-    trackerYToDrone = int((y / min) * 20)
-    trackerZToDrone = int((z / min) * 20)
-    trackerToSpeed = int((distanceFromCenter / 7.6) + 9)
+    xzDeadzone = 150.0
+    yDeadzone = 100.0
 
-    #The speed is calculated this way because the max distance from the center
-    #is approximately 566 units away, and to divide it evenly to fit in
-    #the tello's range of 10 - 100, every 7.6 units is converted to 1 unit of speed
+    xzDistance = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2)))
 
-    tello.go_xyz_speed(trackerXToDrone, trackerYToDrone, trackerZToDrone, trackerToSpeed)
+    if xzDistance > xzDeadzone:
+        xSpeed = int(x / 4)
+        zSpeed = int(z / 4)
+
+    if y > yDeadzone:
+        ySpeed = int(y / 3)
+
+    send_rc_control(self, xSpeed, zSpeed, ySpeed, 0)
 
 class GUI_Support:
 
@@ -54,7 +52,7 @@ class GUI_Support:
         handY += 850
         width, height = dims
         screen.fill((175, 238, 247))
-        
+
         #Creates the circles where the hand is located
         circleRadius = 20
         pygame.draw.circle(screen, (0, 0, 0), (handX, handZ), circleRadius)
@@ -75,7 +73,7 @@ class GUI_Support:
         screen.blit(showXZCoords, (0, 10))
 
         #Y-Axis coordinate display
-        handYVisual = 400 - handY 
+        handYVisual = 400 - handY
         showYCoords = myFont.render(f'Y Coords:{handYVisual}', True, (0,0,0))
         screen.blit(showYCoords, (810, 0))
 
@@ -132,11 +130,11 @@ if __name__ == "__main__":
     #Initializes the pygame GUI window
     guiSupport = GUI_Support()
 
-    #Initializes window to 1300x800 but 800x800 is used for the X and Z portion of the display 
+    #Initializes window to 1300x800 but 800x800 is used for the X and Z portion of the display
     xWidth = 1300
     yHeight = 800
     screen = guiSupport.initDisplay((xWidth, yHeight))
-    
+
     #Initializing font for coordinate display
     pygame.font.init()
     myFont = pygame.font.SysFont('Comic Sans MS', 22)
