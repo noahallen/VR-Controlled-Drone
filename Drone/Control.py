@@ -122,6 +122,29 @@ class GUI_Support:
         wd = arrowFont.render(f'd', True, (0,0,0))
         screen.blit(wd, (395, 229))
 
+         # REVERSE ARROW
+        pygame.draw.line(screen, (0, 0, 0), (410, 549), (410,620), 2)
+        pygame.draw.line(screen, (0, 0, 0), (410,620), (425, 620), 2)
+        pygame.draw.line(screen, (0, 0, 0), (425, 620), (400, 650), 2)
+        pygame.draw.line(screen, (0, 0, 0), (400, 650), (375, 620), 2)
+        pygame.draw.line(screen, (0, 0, 0), (375, 620), (390,620), 2)
+        pygame.draw.line(screen, (0, 0, 0), (390,620), (390,549), 2)
+        pygame.draw.line(screen, (0, 0, 0), (390,549), (410, 549), 2)
+        wR = arrowFont.render(f'R', True, (0,0,0))
+        screen.blit(wR, (395, 550))
+        we = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(we, (395, 562))
+        wv = arrowFont.render(f'v', True, (0,0,0))
+        screen.blit(wv, (395, 574))
+        we = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(we, (395, 586))
+        wr = arrowFont.render(f'r', True, (0,0,0))
+        screen.blit(wr, (395, 598))
+        ws = arrowFont.render(f's', True, (0,0,0))
+        screen.blit(ws, (395, 610))
+        we = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(we, (395, 622))
+
 
         #XZ axis coordinate display
         
