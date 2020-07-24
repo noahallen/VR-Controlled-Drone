@@ -145,6 +145,52 @@ class GUI_Support:
         we = arrowFont.render(f'e', True, (0,0,0))
         screen.blit(we, (395, 622))
 
+        #DESCEND ARROW
+        pygame.draw.line(screen, (0, 0, 0), (840, 505), (840,575), 2)
+        pygame.draw.line(screen, (0, 0, 0), (840,575), (855, 575), 2)
+        pygame.draw.line(screen, (0, 0, 0), (855, 575), (830, 605), 2)
+        pygame.draw.line(screen, (0, 0, 0), (830, 605), (805, 575), 2)
+        pygame.draw.line(screen, (0, 0, 0), (805, 575), (820,575), 2)
+        pygame.draw.line(screen, (0, 0, 0), (820,575), (820,505), 2)
+        pygame.draw.line(screen, (0, 0, 0), (820,505), (840, 505), 2)
+        wDescend = arrowFont.render(f'D', True, (0,0,0))
+        screen.blit(wDescend, (825, 502))
+        wDescend = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(wDescend, (825, 514))
+        wDescend = arrowFont.render(f's', True, (0,0,0))
+        screen.blit(wDescend, (825, 526))
+        wDescend = arrowFont.render(f'c', True, (0,0,0))
+        screen.blit(wDescend, (825, 538))
+        wDescend = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(wDescend, (825, 550))
+        wDescend = arrowFont.render(f'n', True, (0,0,0))
+        screen.blit(wDescend, (825, 562))
+        wDescend = arrowFont.render(f'd', True, (0,0,0))
+        screen.blit(wDescend, (825, 574))
+
+        # ASCEND ARROW
+        pygame.draw.line(screen, (0, 0, 0), (840, 295), (840,225), 2)
+        pygame.draw.line(screen, (0, 0, 0), (840,225), (855, 225), 2)
+        pygame.draw.line(screen, (0, 0, 0), (855, 225), (830, 195), 2)
+        pygame.draw.line(screen, (0, 0, 0), (830, 195), (805, 225), 2)
+        pygame.draw.line(screen, (0, 0, 0), (805, 225), (820,225), 2)
+        pygame.draw.line(screen, (0, 0, 0), (820,225), (820,295), 2)
+        pygame.draw.line(screen, (0, 0, 0), (820,295), (840, 295), 2)
+        wAscend = arrowFont.render(f'A', True, (0,0,0))
+        screen.blit(wAscend, (825, 210))
+        wAscend = arrowFont.render(f's', True, (0,0,0))
+        screen.blit(wAscend, (825, 222))
+        wAscend = arrowFont.render(f'c', True, (0,0,0))
+        screen.blit(wAscend, (825, 234))
+        wAscend = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(wAscend, (825, 246))
+        wAscend = arrowFont.render(f'n', True, (0,0,0))
+        screen.blit(wAscend, (825, 258))
+        wAscend = arrowFont.render(f'd', True, (0,0,0))
+        screen.blit(wAscend, (825, 270))
+        
+        
+
 
         #XZ axis coordinate display
         
