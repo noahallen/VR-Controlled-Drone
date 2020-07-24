@@ -33,7 +33,7 @@ def droneController(coords):
     if y > yDeadzone:
         ySpeed = int(y / 3)
 
-    send_rc_control(self, xSpeed, zSpeed, ySpeed, 0)
+    tello.send_rc_control(xSpeed, zSpeed, ySpeed, 0)
 
 class GUI_Support:
 
