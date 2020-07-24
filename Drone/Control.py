@@ -193,7 +193,6 @@ class GUI_Support:
 
 
         #XZ axis coordinate display
-        
         showXZCoords = myFont.render(f'X,Z Coords:{handXVisual},{handZVisual}', True, (0,0,0))
         screen.blit(showXZCoords, (0, 10))
 
@@ -264,8 +263,8 @@ if __name__ == "__main__":
     pygame.font.init()
     myFont = pygame.font.SysFont('Comic Sans MS', 22)
     arrowFont = pygame.font.SysFont('Comic Sans MS', 18)
-    #drone icon
 
+    #drone icon
     icon = pygame.image.load(path + '\Drone.png')
     pygame.display.set_icon(icon)
     pygame.display.set_caption('Drone Controller')

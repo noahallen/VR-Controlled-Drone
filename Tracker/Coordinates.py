@@ -29,7 +29,7 @@ class SampleListener(Leap.Listener):
     def on_frame(self, controller):
 
         #Slows down the speed of the output by skipping frames by changing seconds variable
-        seconds = .01
+        seconds = .001
         time.sleep(seconds)
         
 
