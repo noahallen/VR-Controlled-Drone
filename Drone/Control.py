@@ -145,6 +145,30 @@ class GUI_Support:
         we = arrowFont.render(f'e', True, (0,0,0))
         screen.blit(we, (395, 622))
 
+        #DESCEND ARROW
+        pygame.draw.line(screen, (0, 0, 0), (840, 505), (840,575), 2)
+        pygame.draw.line(screen, (0, 0, 0), (840,575), (855, 575), 2)
+        pygame.draw.line(screen, (0, 0, 0), (855, 575), (830, 605), 2)
+        pygame.draw.line(screen, (0, 0, 0), (830, 605), (805, 575), 2)
+        pygame.draw.line(screen, (0, 0, 0), (805, 575), (820,575), 2)
+        pygame.draw.line(screen, (0, 0, 0), (820,575), (820,505), 2)
+        pygame.draw.line(screen, (0, 0, 0), (820,505), (840, 505), 2)
+        wDescend = arrowFont.render(f'D', True, (0,0,0))
+        screen.blit(wDescend, (825, 502))
+        wDescend = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(wDescend, (825, 514))
+        wDescend = arrowFont.render(f's', True, (0,0,0))
+        screen.blit(wDescend, (825, 526))
+        wDescend = arrowFont.render(f'c', True, (0,0,0))
+        screen.blit(wDescend, (825, 538))
+        wDescend = arrowFont.render(f'e', True, (0,0,0))
+        screen.blit(wDescend, (825, 550))
+        wDescend = arrowFont.render(f'n', True, (0,0,0))
+        screen.blit(wDescend, (825, 562))
+        wDescend = arrowFont.render(f'd', True, (0,0,0))
+        screen.blit(wDescend, (825, 574))
+        
+
 
         #XZ axis coordinate display
         
