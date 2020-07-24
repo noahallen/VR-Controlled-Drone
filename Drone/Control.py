@@ -3,6 +3,15 @@ import tello
 import pygame, math, time, sys, os
 from ast import literal_eval
 
+def connectToDrone():
+    global tello
+    tello = Tello()
+    tello.connect()
+
+def droneTakeoff():
+    tello.takeoff()
+    time.sleep(10)
+
 def droneController(coords):
     x = coords[0]
     y = coords[1] - 450
