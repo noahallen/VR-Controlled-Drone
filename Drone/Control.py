@@ -231,6 +231,29 @@ class GUI_Support:
         screen.blit(wAscend, (825, 258))
         wAscend = arrowFont.render(f'd', True, (0,0,0))
         screen.blit(wAscend, (825, 270))
+
+        #Take off                                _______
+        takeOffVisual = myFont.render(f'Take-Off:_____T', True, (0,0,0))
+        screen.blit(takeOffVisual, (12,712))
+
+        #Land                             _____________
+        landVisual = myFont.render(f'Land:________L', True, (0,0,0))
+        screen.blit(landVisual, (12,731))
+
+        # Rotate Left: a                         ___
+        rotateLeft = myFont.render(f'Rotate-Left:___A', True, (0,0,0))
+        screen.blit(rotateLeft, (12,750))
+
+        # Rotate Right: d                         
+        rotateRight = myFont.render(f'Rotate-Right:__D', True, (0,0,0))
+        screen.blit(rotateRight, (12,772))
+
+        #box
+        pygame.draw.line(screen, (0, 0, 0), (4, 710), (4,797), 2)
+        pygame.draw.line(screen, (0, 0, 0), (4, 797), (155,797), 2)
+        pygame.draw.line(screen, (0, 0, 0), (155,797), (155,710), 2)
+        pygame.draw.line(screen, (0, 0, 0), (155, 710), (4,710), 2)
+        
         
         
 
