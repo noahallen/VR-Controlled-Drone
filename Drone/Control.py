@@ -3,14 +3,24 @@ import tello
 import pygame, math, time, sys, os
 from ast import literal_eval
 
+
 def connectToDrone():
     global tello
     tello = Tello()
     tello.connect()
 
+
 def droneTakeoff():
     tello.takeoff()
     time.sleep(10)
+    connectToSocket()
+
+
+def droneLand():
+    s.close()
+    sconnected = False
+    tello.end()
+
 
 def droneController(coords):
     x = coords[0]
@@ -33,7 +43,7 @@ def droneController(coords):
     if y > yDeadzone:
         ySpeed = int(y / 3)
 
-    tello.send_rc_control(xSpeed, zSpeed, ySpeed, 0)
+    tello.send_rc_control(xSpeed, zSpeed, ySpeed, rotation)
 
 class GUI_Support:
 
@@ -42,30 +52,42 @@ class GUI_Support:
         return pygame.display.set_mode(dims)
 
     def isQuit(self):
-        takeOffFlag = False
-        landingFlag = False
-        websocketFlag = False
+        
+        #For each event in the program
         for event in pygame.event.get():
+
+            #If the close button is pressed
             if event.type == pygame.QUIT:
+                droneLand()
                 raise SystemExit
+
+            #When a button is pressed down
             elif event.type == pygame.KEYDOWN:
+                #Rotate left
                 if event.key == pygame.K_a:
-                    #call rotate-left function
+                    rotation = -30
+                
+                #Rotate right
                 elif event.key == pygame.K_d:
-                    #call rotate-right function
+                    rotation = 30
+
+            #When a button is let go
             elif event.type == pygame.KEYUP:
-                 if event.key == pygame.K_w:
-                    if takeOffFlag == False:
-                        #call take-off function here
-                        takeOffFlag = True
-                elif event.Key == pygame.K_s:
-                    if landingFlag == False:
-                        #call land function here
-                        landingFlag = True
-                elif event.key == pygame.K_SPACEBAR:
-                    if websocketFlag == False:
-                        #call web-socket connection
-                        websocketFlag = True
+
+                #When t is pressed
+                if event.key == pygame.K_t:
+                    #Call take-off function here
+                    droneTakeoff()
+
+                #When l is pressed
+                elif event.Key == pygame.K_l:
+                    #Call land function here
+                    droneLand()
+
+                #When a or d is let go
+                elif event.key == pygame.K_a or event.key == pygame.K_d:
+                    rotation = 0
+
 
 
 
@@ -237,11 +259,21 @@ def guiDisplay(coords):
     print(coords)
 
 
+#Initializes the socket connection with the hand sensor file
+def connectToSocket():
+    global s
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((socket.gethostname(), 1243))
+    global sconnected
+    sconnected = True
+    main()
+
+
 #Receives coordinates from web socket connection and passes them to the drone and GUI portions of the code
 def main():
     prevVal = (0, 450, 0)
     try:
-        while True:
+        while sconnected:
             #Receive 1024 bits of websocket information (Is enough for our purposes)
             full_msg = ''
             msg = s.recv(1024)
@@ -258,19 +290,28 @@ def main():
                 #Passes the GUI an array of the hand coordinates
                 guiDisplay(coordinateArr)
 
-                #To add: Function that takes coordinates and outputs drone commands to the connected drone
-                #droneController(coordinateArr)
-
+                #Function that takes coordinates and outputs drone commands to the connected drone
+                droneController(coordinateArr)
 
             prevVal = coordinateArr
 
     except:
         print("Connection closed")
+        tello.end()
+
+
 
 
 if __name__ == "__main__":
     #Gets current working directory to pass to the GUI
     path = os.getcwd()
+
+    #A global rotation value that can be used by the GUI to help control the drone
+    global rotation
+    rotation = 0
+
+    #Connects to the drone object
+    connectToDrone()
 
     #Initializes the pygame GUI window
     guiSupport = GUI_Support()
@@ -285,13 +326,7 @@ if __name__ == "__main__":
     myFont = pygame.font.SysFont('Comic Sans MS', 22)
     arrowFont = pygame.font.SysFont('Comic Sans MS', 18)
 
-    #drone icon
+    #Drone icon
     icon = pygame.image.load(path + '\Drone.png')
     pygame.display.set_icon(icon)
     pygame.display.set_caption('Drone Controller')
-
-    #Initializes the socket connection with the hand sensor file
-    global s
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((socket.gethostname(), 1243))
-    main()
