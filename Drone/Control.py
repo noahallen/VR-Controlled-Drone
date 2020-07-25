@@ -1,5 +1,5 @@
 import socket
-import tello
+from tello import Tello
 import pygame, math, time, sys, os
 from ast import literal_eval
 
@@ -8,18 +8,20 @@ def connectToDrone():
     global tello
     tello = Tello()
     tello.connect()
+    time.sleep(5)
 
 
 def droneTakeoff():
     tello.takeoff()
     time.sleep(10)
-    connectToSocket()
+    droneReady = True
 
 
 def droneLand():
-    s.close()
-    sconnected = False
+    droneReady = False
     tello.end()
+    time.sleep(1)
+    s.close()
 
 
 def droneController(coords):
@@ -264,8 +266,6 @@ def connectToSocket():
     global s
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((socket.gethostname(), 1243))
-    global sconnected
-    sconnected = True
     main()
 
 
@@ -273,7 +273,7 @@ def connectToSocket():
 def main():
     prevVal = (0, 450, 0)
     try:
-        while sconnected:
+        while True:
             #Receive 1024 bits of websocket information (Is enough for our purposes)
             full_msg = ''
             msg = s.recv(1024)
@@ -291,7 +291,8 @@ def main():
                 guiDisplay(coordinateArr)
 
                 #Function that takes coordinates and outputs drone commands to the connected drone
-                droneController(coordinateArr)
+                if(droneReady):
+                    droneController(coordinateArr)
 
             prevVal = coordinateArr
 
@@ -305,6 +306,10 @@ def main():
 if __name__ == "__main__":
     #Gets current working directory to pass to the GUI
     path = os.getcwd()
+
+    #Global variable to control whether or not to output commands to the drone
+    global droneReady
+    droneReady = False
 
     #A global rotation value that can be used by the GUI to help control the drone
     global rotation
@@ -330,3 +335,6 @@ if __name__ == "__main__":
     icon = pygame.image.load(path + '\Drone.png')
     pygame.display.set_icon(icon)
     pygame.display.set_caption('Drone Controller')
+
+    #Connect to socket
+    connectToSocket()
