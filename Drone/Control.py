@@ -2,9 +2,11 @@ import socket
 from tello import Tello
 import pygame, math, time, sys, os
 from ast import literal_eval
-import keyboard
 
 
+#Creates the tello object and connects to it
+#Also flags can_send_rc_control to False until takeoff where it will become true
+#Sleep for 2 seconds to let it finish connecting before initializing the GUI
 def connectToDrone():
     global tello
     tello = Tello()
@@ -13,17 +15,21 @@ def connectToDrone():
     time.sleep(2)
 
 
+#Function to call the Tello's takeoff function and flag can_send_rc_control to true
 def droneTakeoff():
     tello.takeoff()
     tello.can_send_rc_control = True
 
 
+#Function to land the drone and flag can_send_rc_control to false
 def droneLand():
     tello.land()
     tello.can_send_rc_control = False
 
 
+#Function to take hand coordinates and keyboard inputs and output drone corresponding drone commands
 def droneController(coords):
+
     #For each event in the program
     for event in pygame.event.get():
 
@@ -34,6 +40,7 @@ def droneController(coords):
 
         #When a button is pressed down
         elif event.type == pygame.KEYDOWN:
+
             #When l is pressed
             if event.Key == pygame.K_l:
                 #Call land function here
@@ -63,32 +70,35 @@ def droneController(coords):
                     rotation = 0
 
 
+    #Flagged true once the drone takes off and false when it lands
     if tello.can_send_rc_control:
         x = coords[0]
         y = coords[1] - 450
         z = coords[2]
 
+        #Initialize velocities and speeds to 0
         tello.for_back_velocity = 0
         tello.left_right_velocity = 0
         tello.up_down_velocity = 0
-
         xSpeed = 0
         ySpeed = 0
         zSpeed = 0
 
+        #The bounds for the "deadzone"
         xzDeadzone = 150.0
         yDeadzone = 100.0
 
+        #Calculates the xz distance vector and compares it to the xzDeadzone
         xzDistance = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2)))
-
         if xzDistance > xzDeadzone:
             xSpeed = int(x / 40)
             zSpeed = int(z / 40)
 
-        if y > yDeadzone:
+        #Checks if the y value is outside of the yDeadzone
+        if math.abs(y) > yDeadzone:
             ySpeed = int(y / 30)
 
-        #Sets the tello's velocity 
+        #Sets the tello's velocity to the corresponding calculated values
         tello.left_right_velocity = xSpeed
         tello.for_back_velocity = zSpeed
         tello.up_down_velocity = ySpeed
@@ -101,17 +111,17 @@ def droneController(coords):
         tello.send_rc_control(tello.left_right_velocity, tello.for_back_velocity, tello.up_down_velocity, tello.yaw_velocity)
 
 
-
-
+#Class for creating the GUI
 class GUI_Support:
 
+    #Initializes the GUI display
     def initDisplay(self, dims):
         pygame.init()
         return pygame.display.set_mode(dims)
 
+    #Called when the x is clicked on the GUI
     def isQuit(self):
         pass
-
 
     #Function to draw and update GUI graphics as it receives new coordinates
     def drawGraphics(self, position, screen, dims):
@@ -286,7 +296,6 @@ class GUI_Support:
         showYCoords = myFont.render(f'Y Coords:{handYVisual}', True, (0,0,0))
         screen.blit(showYCoords, (810, 0))
 
-
     #Not sure what this does but crashes without it
     def getTextObjects(self, text, font):
         textSurface = font.render(text, True, (255,255,255))
@@ -322,9 +331,8 @@ def main():
 
             #This is meant to clear the buffer until only one array is left if the buffer is filled too fast
             while(len(full_msg) > 20):
-                count += 1
 
-                #Re-receives 1024 bits of websocket information in order to unclog the buffer
+                #Re-receives 1024 bits of websocket information in order to clear the buffer 1024 bits at a time
                 full_msg = ''
                 msg = s.recv(1024)
                 full_msg = msg.decode("utf-8")
@@ -349,8 +357,7 @@ def main():
         droneLand()
 
 
-
-
+#Initial function that runs 
 if __name__ == "__main__":
     #Gets current working directory to pass to the GUI
     path = os.getcwd()
