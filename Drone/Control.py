@@ -2,50 +2,106 @@ import socket
 from tello import Tello
 import pygame, math, time, sys, os
 from ast import literal_eval
+import keyboard
 
 
 def connectToDrone():
     global tello
     tello = Tello()
     tello.connect()
-    time.sleep(5)
+    tello.can_send_rc_control = False
+    time.sleep(2)
 
 
 def droneTakeoff():
     tello.takeoff()
-    time.sleep(10)
-    droneReady = True
+    tello.can_send_rc_control = True
 
 
 def droneLand():
-    droneReady = False
-    tello.end()
-    time.sleep(1)
-    s.close()
+    tello.land()
+    tello.can_send_rc_control = False
 
 
 def droneController(coords):
-    x = coords[0]
-    y = coords[1] - 450
-    z = coords[2]
+    #For each event in the program
+    for event in pygame.event.get():
 
-    xSpeed = 0
-    ySpeed = 0
-    zSpeed = 0
+        #If the close button is pressed
+        if event.type == pygame.QUIT:
+            # raise SystemExit
+            pass
 
-    xzDeadzone = 150.0
-    yDeadzone = 100.0
+        #When a button is pressed down
+        elif event.type == pygame.KEYDOWN:
+            #When l is pressed
+            if event.Key == pygame.K_l:
+                #Call land function here
+                droneLand()
 
-    xzDistance = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2)))
 
-    if xzDistance > xzDeadzone:
-        xSpeed = int(x / 4)
-        zSpeed = int(z / 4)
+        #When a button is let go
+        elif event.type == pygame.KEYUP:
 
-    if y > yDeadzone:
-        ySpeed = int(y / 3)
+            #When t is pressed
+            if event.key == pygame.K_t:
+                #Call take-off function here
+                droneTakeoff()
 
-    tello.send_rc_control(xSpeed, zSpeed, ySpeed, rotation)
+            # #Rotate left
+            elif event.key == pygame.K_a:
+                if(rotation != -30)
+                    rotation = -30
+                else:
+                    rotation = 0
+            
+            # #Rotate right
+            elif event.key == pygame.K_d:
+                if(rotation != 30)
+                    rotation = 30
+                else:
+                    rotation = 0
+
+
+    if tello.can_send_rc_control:
+        x = coords[0]
+        y = coords[1] - 450
+        z = coords[2]
+
+        tello.for_back_velocity = 0
+        tello.left_right_velocity = 0
+        tello.up_down_velocity = 0
+
+        xSpeed = 0
+        ySpeed = 0
+        zSpeed = 0
+
+        xzDeadzone = 150.0
+        yDeadzone = 100.0
+
+        xzDistance = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2)))
+
+        if xzDistance > xzDeadzone:
+            xSpeed = int(x / 40)
+            zSpeed = int(z / 40)
+
+        if y > yDeadzone:
+            ySpeed = int(y / 30)
+
+        #Sets the tello's velocity 
+        tello.left_right_velocity = xSpeed
+        tello.for_back_velocity = zSpeed
+        tello.up_down_velocity = ySpeed
+        tello.yaw_velocity = rotation 
+
+        #Test command to just rotate forever
+        # tello.send_rc_control(0, 0, 0, 30)
+
+        #Sends the command to control the drone to the drone
+        tello.send_rc_control(tello.left_right_velocity, tello.for_back_velocity, tello.up_down_velocity, tello.yaw_velocity)
+
+
+
 
 class GUI_Support:
 
@@ -54,43 +110,7 @@ class GUI_Support:
         return pygame.display.set_mode(dims)
 
     def isQuit(self):
-        
-        #For each event in the program
-        for event in pygame.event.get():
-
-            #If the close button is pressed
-            if event.type == pygame.QUIT:
-                droneLand()
-                raise SystemExit
-
-            #When a button is pressed down
-            elif event.type == pygame.KEYDOWN:
-                #Rotate left
-                if event.key == pygame.K_a:
-                    rotation = -30
-                
-                #Rotate right
-                elif event.key == pygame.K_d:
-                    rotation = 30
-
-            #When a button is let go
-            elif event.type == pygame.KEYUP:
-
-                #When t is pressed
-                if event.key == pygame.K_t:
-                    #Call take-off function here
-                    droneTakeoff()
-
-                #When l is pressed
-                elif event.Key == pygame.K_l:
-                    #Call land function here
-                    droneLand()
-
-                #When a or d is let go
-                elif event.key == pygame.K_a or event.key == pygame.K_d:
-                    rotation = 0
-
-
+        pass
 
 
     #Function to draw and update GUI graphics as it receives new coordinates
@@ -257,9 +277,6 @@ class GUI_Support:
         pygame.draw.line(screen, (0, 0, 0), (155, 710), (4,710), 2)
         
         
-        
-
-
         #XZ axis coordinate display
         showXZCoords = myFont.render(f'X,Z Coords:{handXVisual},{handZVisual}', True, (0,0,0))
         screen.blit(showXZCoords, (0, 10))
@@ -268,7 +285,6 @@ class GUI_Support:
         handYVisual = 400 - handY
         showYCoords = myFont.render(f'Y Coords:{handYVisual}', True, (0,0,0))
         screen.blit(showYCoords, (810, 0))
-
 
 
     #Not sure what this does but crashes without it
@@ -281,10 +297,9 @@ class GUI_Support:
 def guiDisplay(coords):
     guiSupport.drawGraphics(coords, screen, (800, 800))
     pygame.display.update()
-    print(coords)
 
 
-#Initializes the socket connection with the hand sensor file
+#Initializes the socket connection with the hand sensor file and starts the main loop
 def connectToSocket():
     global s
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -294,34 +309,44 @@ def connectToSocket():
 
 #Receives coordinates from web socket connection and passes them to the drone and GUI portions of the code
 def main():
-    prevVal = (0, 450, 0)
     try:
         while True:
+            
             #Receive 1024 bits of websocket information (Is enough for our purposes)
             full_msg = ''
             msg = s.recv(1024)
 
             #Full message recieves a decoded string of the server data
             full_msg = msg.decode("utf-8")
+            print(full_msg)
+
+            #This is meant to clear the buffer until only one array is left if the buffer is filled too fast
+            while(len(full_msg) > 20):
+                count += 1
+
+                #Re-receives 1024 bits of websocket information in order to unclog the buffer
+                full_msg = ''
+                msg = s.recv(1024)
+                full_msg = msg.decode("utf-8")
+                print(full_msg)
+            
 
             #Turns the string array into an actual array of integers
             coordinateArr = literal_eval(full_msg)
 
-            #If the current coordinates received are a duplicate of the last coordinates, don't send a repeat
-            if(coordinateArr != prevVal):
+            #Passes the GUI an array of the hand coordinates
+            guiDisplay(coordinateArr)
 
-                #Passes the GUI an array of the hand coordinates
-                guiDisplay(coordinateArr)
+            #Function that takes coordinates and outputs drone commands to the connected drone
+            droneController(coordinateArr)
 
-                #Function that takes coordinates and outputs drone commands to the connected drone
-                if(droneReady):
-                    droneController(coordinateArr)
 
-            prevVal = coordinateArr
 
-    except:
+    except Exception as inst:
+        print(type(inst)) 
+        print(inst) 
         print("Connection closed")
-        tello.end()
+        droneLand()
 
 
 
@@ -329,10 +354,6 @@ def main():
 if __name__ == "__main__":
     #Gets current working directory to pass to the GUI
     path = os.getcwd()
-
-    #Global variable to control whether or not to output commands to the drone
-    global droneReady
-    droneReady = False
 
     #A global rotation value that can be used by the GUI to help control the drone
     global rotation
