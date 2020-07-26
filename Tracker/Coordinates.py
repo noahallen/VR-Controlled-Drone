@@ -29,16 +29,13 @@ class SampleListener(Leap.Listener):
     def on_frame(self, controller):
 
         #Slows down the speed of the output by skipping frames by changing seconds variable
-        seconds = .001
+        seconds = .01
         time.sleep(seconds)
         
 
         # Get the most recent frame and report some basic information
         frame = controller.frame()
 
-        #Prints information about the frame and hands/fingers detected
-        # print ("Frame id: %d, timestamp: %d, hands: %d, fingers: %d" % (
-        #       frame.id, frame.timestamp, len(frame.hands), len(frame.fingers)))
 
         # Get hands
         for hand in frame.hands:
@@ -80,22 +77,6 @@ class SampleListener(Leap.Listener):
                 clientsocket.send(str(intPos))
             except:
                 waitForConnection()
-
-
-
-            #Prints basic info of the shown hands
-            # print ("  %s, id %d, position: %s" % (
-            #     handType, hand.id, hand.palm_position))
-
-            # # Get the hand's normal vector and direction
-            # normal = hand.palm_normal
-            # direction = hand.direction
-
-            # # Calculate the hand's pitch, roll, and yaw angles
-            # print "  pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (
-            #     direction.pitch * Leap.RAD_TO_DEG,
-            #     normal.roll * Leap.RAD_TO_DEG,
-            #     direction.yaw * Leap.RAD_TO_DEG)
 
 
         if not frame.hands.is_empty:
