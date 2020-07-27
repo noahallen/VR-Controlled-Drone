@@ -10,12 +10,6 @@ from ast import literal_eval
 def connectToDrone():
     global tello
     tello = Tello()
-    
-    #A global rotateVal value that can be used by the GUI to help control the drone
-    global rotateVal
-    rotateVal = 0
-    print("Rotate val initialized")
-
     tello.connect()
     tello.can_send_rc_control = False
     tello.yaw_velocity = 0
