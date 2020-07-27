@@ -39,6 +39,10 @@ def droneController(coords):
             # raise SystemExit
             pass
 
+        #when mouse button is clicked, do nothing
+        elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+            pass
+
         #When a button is pressed down
         elif event.type == pygame.KEYDOWN:
 
@@ -296,6 +300,12 @@ class GUI_Support:
         showYCoords = myFont.render(f'Y Coords:{handYVisual}', True, (0,0,0))
         screen.blit(showYCoords, (810, 0))
 
+        #Show battery % 
+        telloBattery = myFont.render(f'Battery: {tello.get_battery()}%', True, (0,0,0))
+        screen.blit(telloBattery, (1200,0))
+
+        
+
     #Not sure what this does but crashes without it
     def getTextObjects(self, text, font):
         textSurface = font.render(text, True, (255,255,255))
@@ -375,7 +385,7 @@ if __name__ == "__main__":
 
     #Initializing font for coordinate display
     pygame.font.init()
-    myFont = pygame.font.SysFont('Comic Sans MS', 22)
+    myFont = pygame.font.SysFont('Arial', 22)
     arrowFont = pygame.font.SysFont('Comic Sans MS', 18)
 
     #Drone icon
