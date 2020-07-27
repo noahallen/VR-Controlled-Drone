@@ -57,14 +57,14 @@ def droneController(coords):
 
             # #Rotate left
             elif event.key == pygame.K_a:
-                if(rotation != -30)
+                if(rotation != -30):
                     rotation = -30
                 else:
                     rotation = 0
             
             # #Rotate right
             elif event.key == pygame.K_d:
-                if(rotation != 30)
+                if(rotation != 30):
                     rotation = 30
                 else:
                     rotation = 0
