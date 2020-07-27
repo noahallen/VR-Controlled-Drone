@@ -10,8 +10,15 @@ from ast import literal_eval
 def connectToDrone():
     global tello
     tello = Tello()
+    
+    #A global rotateVal value that can be used by the GUI to help control the drone
+    global rotateVal
+    rotateVal = 0
+    print("Rotate val initialized")
+
     tello.connect()
     tello.can_send_rc_control = False
+    tello.yaw_velocity = 0
     time.sleep(2)
 
 
@@ -55,19 +62,19 @@ def droneController(coords):
                 #Call take-off function here
                 droneTakeoff()
 
-            # # #Rotate left
-            # elif event.key == pygame.K_a:
-            #     if(rotation != -30):
-            #         rotation = -30
-            #     else:
-            #         rotation = 0
+            #Rotate left
+            elif event.key == pygame.K_a:
+                if(tello.yaw_velocity != -30):
+                    tello.yaw_velocity = -30
+                else:
+                    tello.yaw_velocity = 0
             
-            # # #Rotate right
-            # elif event.key == pygame.K_d:
-            #     if(rotation != 30):
-            #         rotation = 30
-            #     else:
-            #         rotation = 0
+            #Rotate right
+            elif event.key == pygame.K_d:
+                if(tello.yaw_velocity != 30):
+                    tello.yaw_velocity = 30
+                else:
+                    tello.yaw_velocity = 0
 
 
     #Flagged true once the drone takes off and false when it lands
@@ -102,8 +109,7 @@ def droneController(coords):
         tello.left_right_velocity = xSpeed
         tello.for_back_velocity = zSpeed
         tello.up_down_velocity = ySpeed
-        tello.yaw_velocity = rotation 
-
+        
         #Test command to just rotate forever
         # tello.send_rc_control(0, 0, 0, 30)
 
@@ -361,10 +367,6 @@ def main():
 if __name__ == "__main__":
     #Gets current working directory to pass to the GUI
     path = os.getcwd()
-
-    #A global rotation value that can be used by the GUI to help control the drone
-    global rotation
-    rotation = 0
 
     #Connects to the drone object
     connectToDrone()
