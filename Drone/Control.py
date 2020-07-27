@@ -42,7 +42,7 @@ def droneController(coords):
         elif event.type == pygame.KEYDOWN:
 
             #When l is pressed
-            if event.Key == pygame.K_l:
+            if event.key == pygame.K_l:
                 #Call land function here
                 droneLand()
 
@@ -55,19 +55,19 @@ def droneController(coords):
                 #Call take-off function here
                 droneTakeoff()
 
-            # #Rotate left
-            elif event.key == pygame.K_a:
-                if(rotation != -30):
-                    rotation = -30
-                else:
-                    rotation = 0
+            # # #Rotate left
+            # elif event.key == pygame.K_a:
+            #     if(rotation != -30):
+            #         rotation = -30
+            #     else:
+            #         rotation = 0
             
-            # #Rotate right
-            elif event.key == pygame.K_d:
-                if(rotation != 30):
-                    rotation = 30
-                else:
-                    rotation = 0
+            # # #Rotate right
+            # elif event.key == pygame.K_d:
+            #     if(rotation != 30):
+            #         rotation = 30
+            #     else:
+            #         rotation = 0
 
 
     #Flagged true once the drone takes off and false when it lands
@@ -91,12 +91,12 @@ def droneController(coords):
         #Calculates the xz distance vector and compares it to the xzDeadzone
         xzDistance = int(math.sqrt(math.pow(x, 2) + math.pow(z, 2)))
         if xzDistance > xzDeadzone:
-            xSpeed = int(x / 40)
-            zSpeed = int(z / 40)
-
+            xSpeed = int(x / 4)
+            zSpeed = int(z / -4)
+            
         #Checks if the y value is outside of the yDeadzone
-        if math.abs(y) > yDeadzone:
-            ySpeed = int(y / 30)
+        if math.fabs(y) > yDeadzone:
+            ySpeed = int(y / 3)
 
         #Sets the tello's velocity to the corresponding calculated values
         tello.left_right_velocity = xSpeed
