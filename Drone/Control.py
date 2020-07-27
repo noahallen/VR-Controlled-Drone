@@ -39,6 +39,10 @@ def droneController(coords):
             # raise SystemExit
             pass
 
+        #when mouse button is clicked, do nothing
+        elif event.type == pygame.MOUSEBUTTONUP or event.type == pygame.MOUSEBUTTONDOWN:
+            pass
+
         #When a button is pressed down
         elif event.type == pygame.KEYDOWN:
 
